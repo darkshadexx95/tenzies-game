@@ -31,12 +31,25 @@ div#root {
 	height: 100%;
 }
 
+.title {
+	margin: 0;
+	font-size: 40px;
+}
+
+.instructions {
+	margin: 0;
+	font-weight: 400;
+	font-family: 'Inter', sans-serif;
+	text-align: center;
+}
+
 .dice-container {
 	display: grid;
 	grid-template-columns: repeat(5, auto);
 	justify-content: space-between;
 	align-items: center;
 	gap: 1rem;
+	margin: 1rem 0;
 	width: 100%;
 }
 
