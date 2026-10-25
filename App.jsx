@@ -49,7 +49,7 @@ export default function App() {
 
 	return (
 		<main>
-			{gameWon && <Confetti />}
+			{gameWon && <Confetti friction={1} gravity={0.25} numberOfPieces={150} />}
 			<div aria-live="polite" className="sr-only">
 				{gameWon && <p>Congratulations! You won! Press "New Game" to start again.</p>}
 			</div>
