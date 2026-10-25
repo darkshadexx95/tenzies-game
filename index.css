@@ -1,5 +1,5 @@
 * {
-	font-family: 'Inter', Arial, sans-serif;
+	font-family: Karla, Arial, sans-serif;
 }
 
 body {
@@ -24,6 +24,7 @@ div#root {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	gap: 1rem;
 	border-radius: 0.25rem;
 	background-color: #f5f5f5;
 	padding: 1rem;
@@ -39,7 +40,7 @@ div#root {
 	width: 100%;
 }
 
-.die {
+button {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -48,11 +49,19 @@ div#root {
 	box-shadow: 0px 2px 2px 0px #0a233340;
 	border: none;
 	border-radius: 0.25rem;
+	font-weight: bold;
+	font-size: 1.25rem;
+}
+
+.die {
 	background-color: #ffffff;
 	width: 3rem;
 	height: 3rem;
 	color: #2b283a;
-	font-weight: bold;
-	font-size: 1.25rem;
-	font-family: 'Inter', Arial, sans-serif;
+}
+
+.roll-button {
+	background-color: #5035ff;
+	padding: 0.5rem 1rem;
+	color: #ffffff;
 }
