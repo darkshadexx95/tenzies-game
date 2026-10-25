@@ -1,46 +1,64 @@
 import React from 'react';
+
 import Die from './Die';
 import { nanoid } from 'nanoid';
 
-export default function App() {
-	const [dice, setDice] = React.useState(generateAllNewDice());
+import Confetti from 'react-confetti';
 
-	function generateRandomNumber() {
-		return Math.ceil(Math.random() * 6);
-	}
+export default function App() {
+	const [dice, setDice] = React.useState(() => generateAllNewDice());
+	const [rollCount, setRollCount] = React.useState(0);
+
+	const buttonRef = React.useRef(null);
 
 	function generateAllNewDice() {
-		const newDice = [];
-
-		for (let i = 0; i < 10; i++) {
-			newDice.push({
-				value: generateRandomNumber(),
-				isHeld: false,
-				id: nanoid(),
-			});
-		}
-		return newDice;
+		return new Array(10).fill(0).map(() => ({
+			value: Math.ceil(Math.random() * 6),
+			isHeld: false,
+			id: nanoid(),
+		}));
 	}
 
 	function hold(id) {
-		console.log(id);
-
-		setDice((prevDice) => prevDice.map((die) => (die.id === id ? { ...die, isHeld: !die.isHeld } : die)));
+		setDice((oldDice) => oldDice.map((die) => (die.id === id ? { ...die, isHeld: !die.isHeld } : die)));
 	}
-
-	const diceElements = dice.map((die) => <Die key={die.id} id={die.id} value={die.value} isHeld={die.isHeld} hold={() => hold(die.id)} />);
 
 	function rollDice() {
-		setDice((prevDice) => prevDice.map((die) => (die.isHeld ? die : { ...die, value: generateRandomNumber() })));
+		if (!gameWon) {
+			setDice((oldDice) => oldDice.map((die) => (die.isHeld ? die : { ...die, value: Math.ceil(Math.random() * 6) })));
+			setRollCount((prevCount) => prevCount + 1);
+		} else {
+			setDice(generateAllNewDice());
+			setRollCount(0);
+		}
 	}
 
+	const diceElements = dice.map((dieObj) => <Die key={dieObj.id} value={dieObj.value} isHeld={dieObj.isHeld} hold={() => hold(dieObj.id)} />);
+
+	const gameWon = dice.every((die) => die.isHeld) && dice.every((die) => die.value === dice[0].value);
+
+	React.useEffect(() => {
+		if (gameWon) {
+			buttonRef.current.focus();
+			buttonRef.current.setAttribute('disabled', 'disabled');
+			setTimeout(() => {
+				buttonRef.current.removeAttribute('disabled');
+			}, 5000);
+		}
+	}, [gameWon]);
+
 	return (
-		<main className="main">
+		<main>
+			{gameWon && <Confetti />}
+			<div aria-live="polite" className="sr-only">
+				{gameWon && <p>Congratulations! You won! Press "New Game" to start again.</p>}
+			</div>
 			<h1 className="title">Tenzies</h1>
 			<p className="instructions">Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
-			<section className="dice-container">{diceElements}</section>
-			<button className="roll-dice" onClick={rollDice}>
-				Roll
+			<h2 className="roll-count">{`Roll count: ${rollCount}`}</h2>
+			<div className="dice-container">{diceElements}</div>
+			<button ref={buttonRef} className="roll-dice" onClick={rollDice}>
+				{gameWon ? 'New Game' : 'Roll'}
 			</button>
 		</main>
 	);
