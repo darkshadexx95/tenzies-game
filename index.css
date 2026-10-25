@@ -60,7 +60,11 @@ button {
 	color: #2b283a;
 }
 
-.roll-button {
+.die.held {
+	background-color: #59e391;
+}
+
+.roll-dice {
 	background-color: #5035ff;
 	padding: 0.5rem 1rem;
 	color: #ffffff;
